@@ -38,6 +38,9 @@ class Down(nn.Module):
             DoubleConv(in_channels, out_channels)
         )
 
+    """
+    将特征图经过max pooling之后，特曾图尺寸降为1半，同时经过2个3*3卷积得到结果特征图
+    """
     def forward(self, x):
         return self.maxpool_conv(x)
 
@@ -57,6 +60,11 @@ class Up(nn.Module):
             self.conv = DoubleConv(in_channels, out_channels)
 
 
+    """
+    1. 上采样:先进行2倍上采样
+    2. 上采样的特征图尺寸跟unet中对应的下采样层feature map尺寸如果不一致，需要进行padding
+    3. 将特征图进行融合，经过2个3*3卷积得到结果
+    """
     def forward(self, x1, x2):
         x1 = self.up(x1)
         # input is CHW
